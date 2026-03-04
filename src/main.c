@@ -4,10 +4,20 @@
 
 #include <stdio.h>
 
-void coroutine_example(struct coroutine_t *coro, void* arg)
+void coroutine_child_example(struct coroutine_t *coro, void* arg)
 {
     char *str = (char *)arg;
     for (int i = 0; i < 5; i++)
+    {
+        printf("%s%d\n", str, i);
+    }
+    return;
+}
+
+void coroutine_example(struct coroutine_t *coro, void* arg)
+{
+    char *str = (char *)arg;
+    for (int i = 0; i < 4; i++)
     {
         printf("%s%d\n", str, i);
         if (async_sleep(coro, 1000) != 0) {
@@ -15,6 +25,9 @@ void coroutine_example(struct coroutine_t *coro, void* arg)
             return;
         }
     }
+
+    coroutine_t *coro_c = create_coroutine(coroutine_child_example, "coro_c -> ");
+    scheduler_add_coroutine_to_start(coro->scheduler, coro_c);
 }
 
 int main()

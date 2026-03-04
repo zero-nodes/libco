@@ -27,8 +27,9 @@ scheduler_t* create_scheduler()
     scheduler->status = INIT_SCHEDULER;
     scheduler->start_list = NULL;
     scheduler->cap_start_list = 0;
+    scheduler->current_index = 0;
     scheduler->epoll_fd = -1;
-
+    
     scheduler->ctx = create_context(empty, 0);
 
     if (!scheduler->ctx) {
@@ -113,18 +114,24 @@ int scheduler_start(scheduler_t *scheduler)
         return -1;
     }
 
-    for (int i = 0; i < scheduler->len_start_list; i++)
+    while(1)
     {
-        context_switch(scheduler->ctx, scheduler->start_list[i]->coroutine_ctx);
-        if (scheduler->start_list[i]->state == FINISHED_COROUTINE)
-        {
-            free_coroutine(scheduler->start_list[i]);
-            scheduler->count_not_ready_coroutine--;
-        }
-    }
 
-    while(scheduler->count_not_ready_coroutine > 0)
-    {
+        for (;scheduler->current_index < scheduler->len_start_list; scheduler->current_index++)
+        {
+            context_switch(scheduler->ctx, scheduler->start_list[scheduler->current_index]->coroutine_ctx);
+            if (scheduler->start_list[scheduler->current_index]->state == FINISHED_COROUTINE)
+            {
+                free_coroutine(scheduler->start_list[scheduler->current_index]);
+                scheduler->count_not_ready_coroutine--;
+            }
+        }
+
+        if (scheduler->count_not_ready_coroutine <= 0)
+        {
+            break;
+        }
+
         struct epoll_event events[MAX_EVENTS];
         int nfds = epoll_wait(scheduler->epoll_fd, events, MAX_EVENTS, -1);
         if (nfds == -1) {

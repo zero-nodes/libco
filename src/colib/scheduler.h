@@ -17,9 +17,11 @@ typedef struct scheduler_t
     int count_not_ready_coroutine;
     scheduler_satus status;
     context_t *ctx;
+
     coroutine_t **start_list;
     size_t len_start_list;
     size_t cap_start_list;
+    size_t current_index;
 } scheduler_t;
 
 extern scheduler_t* create_scheduler();

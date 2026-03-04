@@ -24,7 +24,7 @@ int async_sleep(coroutine_t *coro, uint64_t ms)
     };
     timerfd_settime(timer_fd, 0, &ts, NULL);
 
-    scheduler_ctl_add(coro->scheduler, coro, timer_fd, EPOLLIN);
+    scheduler_ctl_add(coro->scheduler, coro, timer_fd, EPOLLIN | EPOLLONESHOT);
 
     coroutine_yield(coro);
 
