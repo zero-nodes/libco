@@ -4,6 +4,7 @@ CFLAGS = -I./src/ -g -O2
 TARGET = build/app
 
 SRCS = src/main.c \
+	   src/map.c \
        src/context/context_switch.S \
        src/context/context_run.S \
 	   src/context/context_save.S \
