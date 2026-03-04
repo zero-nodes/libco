@@ -1,13 +1,15 @@
 CC = gcc
-CFLAGS = -I. -g -O2
+CFLAGS = -I./src/ -g -O2
 
 TARGET = build/app
 
 SRCS = src/main.c \
-       src/context/context.c \
        src/context/context_switch.S \
        src/context/context_run.S \
-	   src/context/context_save.S
+	   src/context/context_save.S \
+       src/context/context.c \
+	   src/colib/coroutine.c \
+	   src/colib/scheduler.c
 
 OBJS = $(SRCS:%.c=build/%.o)
 
