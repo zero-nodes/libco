@@ -25,6 +25,7 @@ typedef struct coroutine_t
 } coroutine_t;
 
 extern coroutine_t *create_coroutine(void(*func)(coroutine_t *coro, void* arg), void* arg);
+extern void coroutine_yield(coroutine_t *coro);
 extern void free_coroutine(coroutine_t *coro);
 
 #endif

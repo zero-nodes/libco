@@ -137,6 +137,9 @@ int scheduler_start(scheduler_t *scheduler)
             coro->event_buffer = events[i].events;
             context_switch(scheduler->ctx, coro->coroutine_ctx);
 
+            epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
+
+
             if (coro->state == FINISHED_COROUTINE)
             {
                 free_coroutine(coro);

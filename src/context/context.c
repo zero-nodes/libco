@@ -25,7 +25,7 @@ context_t *create_context(void (*func)(), size_t count_args, ...)
         return NULL;
     }
     
-    ctx->stack_sp = (uintptr_t)ctx->stack + (STANDARD_STACK_CONTEXT_SIZE - sizeof(regs_t));
+    ctx->stack_sp = (uintptr_t)ctx->stack + (STANDARD_STACK_CONTEXT_SIZE - sizeof(regs_t) - 8);
     init_regs = (regs_t*)ctx->stack_sp;
     init_regs->rip = (uint64_t)func;
 
@@ -33,7 +33,6 @@ context_t *create_context(void (*func)(), size_t count_args, ...)
     init_regs->rsi = 0;
     init_regs->rdx = 0;
     init_regs->rcx = 0;
-    init_regs->r9 = 0;
     init_regs->r9 = 0;
 
     va_list args;

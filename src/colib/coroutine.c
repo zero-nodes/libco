@@ -40,6 +40,12 @@ coroutine_t *create_coroutine(void(*func)(coroutine_t *coro, void* arg), void* a
     return coro;
 }
 
+void coroutine_yield(coroutine_t *coro)
+{
+    coro->state = WAITTING_COROUTINE;
+    context_switch(coro->coroutine_ctx, coro->scheduler->ctx);
+}
+
 void free_coroutine(coroutine_t *coro)
 {
     if (coro)

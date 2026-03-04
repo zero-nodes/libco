@@ -9,7 +9,9 @@ SRCS = src/main.c \
 	   src/context/context_save.S \
        src/context/context.c \
 	   src/colib/coroutine.c \
-	   src/colib/scheduler.c
+	   src/colib/scheduler.c \
+	   src/colib/async_socket.c \
+	   src/colib/async_time.c \
 
 OBJS = $(SRCS:%.c=build/%.o)
 
