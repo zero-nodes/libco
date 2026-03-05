@@ -1,32 +1,32 @@
 CC = gcc
-CFLAGS = -I./src/ -g -O2
+CFLAGS = -I./include/ -g -O2
 
-TARGET = build/app
+LIBRARY = build/libco.a
 
-SRCS = src/main.c \
-	   src/map.c \
-       src/context/context_switch.S \
+# Исходные файлы
+SRCS = src/context/context_switch.S \
        src/context/context_run.S \
-	   src/context/context_save.S \
+       src/context/context_save.S \
        src/context/context.c \
-	   src/colib/coroutine.c \
-	   src/colib/scheduler.c \
-	   src/colib/async_socket.c \
-	   src/colib/async_time.c \
+       src/libco/coroutine.c \
+       src/libco/scheduler.c \
+       src/libco/async_socket.c \
+       src/libco/async_time.c \
 
-OBJS = $(SRCS:%.c=build/%.o)
+OBJS = $(SRCS:src/%.c=build/%.o)
+OBJS += $(SRCS:src/%.S=build/%.o)
 
-all: $(TARGET)
+all: $(LIBRARY)
 
-$(TARGET): $(OBJS)
+$(LIBRARY): $(OBJS)
 	@mkdir -p $(dir $@)
-	$(CC) $(OBJS) -o $(TARGET)
+	ar rcs $@ $(OBJS)
 
-build/%.o: %.c
+build/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-build/%.o: %.S
+build/%.o: src/%.S
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 

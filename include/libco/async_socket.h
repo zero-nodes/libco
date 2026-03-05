@@ -1,8 +1,8 @@
 #ifndef ASYNC_SOCKET_H
 #define ASYNC_SOCKET_H
 
-#include "colib/scheduler.h"
-#include "colib/coroutine.h"
+#include "libco/scheduler.h"
+#include "libco/coroutine.h"
 
 #include <sys/socket.h>
 

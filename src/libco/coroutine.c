@@ -1,5 +1,5 @@
-#include "coroutine.h"
-#include "scheduler.h"
+#include "libco/coroutine.h"
+#include "libco/scheduler.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,6 +36,7 @@ coroutine_t *create_coroutine(void(*func)(coroutine_t *coro, void* arg), void* a
     coro->func = func;
     coro->arg = arg;
     coro->state = INIT_COROUTINE;
+    coro->wait_fd = -1;
 
     return coro;
 }

@@ -1,4 +1,4 @@
-#include "scheduler.h"
+#include "libco/scheduler.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -122,9 +122,13 @@ int scheduler_start(scheduler_t *scheduler)
             context_switch(scheduler->ctx, scheduler->start_list[scheduler->current_index]->coroutine_ctx);
             if (scheduler->start_list[scheduler->current_index]->state == FINISHED_COROUTINE)
             {
-                free_coroutine(scheduler->start_list[scheduler->current_index]);
+                coroutine_t *coro = scheduler->start_list[scheduler->current_index];
+                if (coro->wait_fd != -1) {
+                    epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_DEL, coro->wait_fd, NULL);
+                }
+                free_coroutine(coro);
                 scheduler->count_not_ready_coroutine--;
-            }
+            }        
         }
 
         if (scheduler->count_not_ready_coroutine <= 0)
@@ -142,17 +146,20 @@ int scheduler_start(scheduler_t *scheduler)
         {
             coroutine_t *coro = (coroutine_t*)events[i].data.ptr;
             coro->event_buffer = events[i].events;
+            
+            if (coro->wait_fd != -1) {
+                epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_DEL, coro->wait_fd, NULL);
+                coro->wait_fd = -1;
+            }
+            
             context_switch(scheduler->ctx, coro->coroutine_ctx);
-
-            epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
-
 
             if (coro->state == FINISHED_COROUTINE)
             {
                 free_coroutine(coro);
                 scheduler->count_not_ready_coroutine--;
             }
-        }
+        }    
     }
     
     return 0;
@@ -166,8 +173,13 @@ int scheduler_ctl_add(scheduler_t *scheduler, coroutine_t *coro, int fd, uint32_
 
     event.events = event_type | EPOLLET;
     event.data.ptr = coro;
-    
-    int r = epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_ADD, fd, &event);
 
-    return r;
+    if (coro->wait_fd != -1) 
+    {
+        epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_DEL, coro->wait_fd, NULL);
+    }
+
+    coro->wait_fd = fd;
+
+    return epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_ADD, fd, &event);
 }

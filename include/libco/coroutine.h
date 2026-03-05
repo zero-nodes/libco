@@ -21,6 +21,7 @@ typedef struct coroutine_t
     void(*func)(struct coroutine_t *coro, void* arg);
     void *arg;
     uint32_t event_buffer;
+    int wait_fd;
 
 } coroutine_t;
 

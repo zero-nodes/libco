@@ -1,6 +1,6 @@
-#include "colib/scheduler.h"
-#include "colib/coroutine.h"
-#include "colib/async_time.h"
+#include "libco/scheduler.h"
+#include "libco/coroutine.h"
+#include "libco/async_time.h"
 
 #include <stdio.h>
 
