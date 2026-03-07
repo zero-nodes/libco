@@ -6,7 +6,10 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 
-#define MAX_EVENTS 10
+
+#ifndef MAX_EVENTS
+#define MAX_EVENTS 16
+#endif
 
 static void empty() {};
 
@@ -17,7 +20,7 @@ scheduler_t* scheduler_create()
 
     if (!scheduler)
     {
-        fprintf(stderr, "error malloc get scheduler");
+        fprintf(stderr, "error malloc get scheduler\n");
         return NULL;
     }
     
@@ -82,7 +85,7 @@ int scheduler_add_coroutine_to_start(scheduler_t *scheduler, coroutine_t *coro)
         coroutine_t **new_list = realloc(scheduler->start_list, new_cap * sizeof(coroutine_t*));
         
         if (!new_list) {
-            perror("realloc failed");
+            perror("realloc failed\n");
             exit(EXIT_FAILURE); 
         }
 
@@ -104,13 +107,13 @@ int scheduler_start(scheduler_t *scheduler)
 
     if (!scheduler)
     {
-        fprintf(stderr, "error start scheduler bot init scheduler");
+        fprintf(stderr, "error start scheduler bot init scheduler\n");
         return -1;
     }
 
     scheduler->epoll_fd = epoll_create1(0);
     if (scheduler->epoll_fd == -1) {
-        fprintf(stderr, "error epoll_create1");
+        fprintf(stderr, "error epoll_create1\n");
         return -1;
     }
 
@@ -139,7 +142,7 @@ int scheduler_start(scheduler_t *scheduler)
         struct epoll_event events[MAX_EVENTS];
         int nfds = epoll_wait(scheduler->epoll_fd, events, MAX_EVENTS, -1);
         if (nfds == -1) {
-            perror("epoll_wait");
+            perror("epoll_wait\n");
             break;
         }
         for (int i = 0; i < nfds; i++) 

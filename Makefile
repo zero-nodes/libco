@@ -2,7 +2,7 @@ CC = clang
 CFLAGS = -I./include/ \
 		 -D_GNU_SOURCE \
 		 -O2 \
-		 -std=c23
+		 -std=c23 \
 
 LIBRARY = build/libco.a
 
@@ -12,6 +12,7 @@ SRCS = src/context/context_switch.S \
        src/context/context.c \
        src/libco/coroutine.c \
        src/libco/scheduler.c \
+       src/libco/scheduler_queue.c \
        src/libco/async_socket.c \
        src/libco/async_time.c \
 

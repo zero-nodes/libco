@@ -16,13 +16,13 @@ int async_socket(coroutine_t *coro, int domain, int type, int protocol)
 
     int flags = fcntl(fd, F_GETFL, 0);
     if (flags == -1) {
-        fprintf(stderr, "fcntl get");
+        fprintf(stderr, "fcntl get\n");
         close(fd);
         return -1;
     }
 
     if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
-        fprintf(stderr, "fcntl set");
+        fprintf(stderr, "fcntl set\n");
         close(fd);
         return -1;
     }
@@ -52,7 +52,7 @@ int async_accept(coroutine_t *coro, int fd, struct sockaddr *addr, socklen_t *ad
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             coroutine_yield(coro);
         } else {
-            perror("accept");
+            perror("accept\n");
             return -1;
         }
     }
@@ -66,7 +66,7 @@ int async_connect(coroutine_t *coro, int fd, const struct sockaddr *addr, sockle
     }
 
     if (errno != EINPROGRESS) {
-        fprintf(stderr, "error connect");
+        fprintf(stderr, "error connect\n");
         return -1;
     }
 

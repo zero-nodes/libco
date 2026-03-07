@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef STANDARD_STACK_CONTEXT_SIZE;
 #define STANDARD_STACK_CONTEXT_SIZE (64 * 1024)
+#endif
 
 context_t *context_create(void *func, size_t count_args, ...)
 {
