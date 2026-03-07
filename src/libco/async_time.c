@@ -1,8 +1,6 @@
 #include "libco/async_time.h"
 
-#include <errno.h>
 #include <stdio.h>
-#include <string.h>
 #include <sys/timerfd.h>
 #include <sys/epoll.h>
 #include <unistd.h>

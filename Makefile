@@ -1,9 +1,11 @@
-CC = gcc
-CFLAGS = -I./include/ -g -O2
+CC = clang
+CFLAGS = -I./include/ \
+		 -D_GNU_SOURCE \
+		 -O2 \
+		 -std=c23
 
 LIBRARY = build/libco.a
 
-# Исходные файлы
 SRCS = src/context/context_switch.S \
        src/context/context_run.S \
        src/context/context_save.S \

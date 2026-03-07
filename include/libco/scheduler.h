@@ -24,8 +24,8 @@ typedef struct scheduler_t
     size_t current_index;
 } scheduler_t;
 
-extern scheduler_t* create_scheduler();
-extern void free_scheduler(scheduler_t *scheduler);
+extern scheduler_t* scheduler_create();
+extern void scheduler_free(scheduler_t *scheduler);
 extern int scheduler_add_coroutine_to_start(scheduler_t *scheduler, coroutine_t *coro);
 extern int scheduler_start(scheduler_t *scheduler);
 extern int scheduler_ctl_add(scheduler_t *scheduler, coroutine_t *coro, int fd, uint32_t event_type);

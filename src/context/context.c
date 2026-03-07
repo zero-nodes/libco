@@ -6,7 +6,7 @@
 
 #define STANDARD_STACK_CONTEXT_SIZE (64 * 1024)
 
-context_t *create_context(void (*func)(), size_t count_args, ...)
+context_t *context_create(void *func, size_t count_args, ...)
 {
     regs_t *init_regs;
     context_t *ctx;
@@ -63,7 +63,7 @@ context_t *create_context(void (*func)(), size_t count_args, ...)
     return ctx;
 }
 
-void free_context(context_t *ctx)
+void context_free(context_t *ctx)
 {
     if (ctx)
     {

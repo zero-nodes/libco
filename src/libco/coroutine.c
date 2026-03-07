@@ -14,7 +14,7 @@ static void coroutine_entry(coroutine_t *coro)
     context_switch(coro->coroutine_ctx, coro->scheduler->ctx);
 }
 
-coroutine_t *create_coroutine(void(*func)(coroutine_t *coro, void* arg), void* arg)
+coroutine_t *coroutine_create(void(*func)(coroutine_t *coro, void* arg), void* arg)
 {
     coroutine_t *coro = malloc(sizeof(coroutine_t));
     if (!coro)
@@ -25,11 +25,11 @@ coroutine_t *create_coroutine(void(*func)(coroutine_t *coro, void* arg), void* a
 
     memset(coro, 0, sizeof(coroutine_t));
     
-    coro->coroutine_ctx = create_context(coroutine_entry, 1, coro);
+    coro->coroutine_ctx = context_create(coroutine_entry, 1, coro);
     if (!coro->coroutine_ctx)
     {
         fprintf(stderr, "error create context\n");
-        free_coroutine(coro);
+        coroutine_free(coro);
         return NULL;
     }
 
@@ -47,13 +47,13 @@ void coroutine_yield(coroutine_t *coro)
     context_switch(coro->coroutine_ctx, coro->scheduler->ctx);
 }
 
-void free_coroutine(coroutine_t *coro)
+void coroutine_free(coroutine_t *coro)
 {
     if (coro)
     {
         if (coro->coroutine_ctx)
         {
-            free_context(coro->coroutine_ctx);
+            context_free(coro->coroutine_ctx);
         }
         free(coro);
     }

@@ -10,7 +10,7 @@
 
 static void empty() {};
 
-scheduler_t* create_scheduler()  
+scheduler_t* scheduler_create()  
 {
     scheduler_t *scheduler;
     scheduler = malloc(sizeof(scheduler_t));
@@ -30,7 +30,7 @@ scheduler_t* create_scheduler()
     scheduler->current_index = 0;
     scheduler->epoll_fd = -1;
     
-    scheduler->ctx = create_context(empty, 0);
+    scheduler->ctx = context_create(empty, 0);
 
     if (!scheduler->ctx) {
         fprintf(stderr, "error create scheduler context\n");
@@ -41,13 +41,13 @@ scheduler_t* create_scheduler()
     return scheduler;
 }
 
-void free_scheduler(scheduler_t *scheduler)
+void scheduler_free(scheduler_t *scheduler)
 {
     if(scheduler)
     {
         if (scheduler->ctx)
         {
-            free_context(scheduler->ctx);
+            context_free(scheduler->ctx);
             scheduler->ctx = NULL;
         }
         
@@ -126,7 +126,7 @@ int scheduler_start(scheduler_t *scheduler)
                 if (coro->wait_fd != -1) {
                     epoll_ctl(scheduler->epoll_fd, EPOLL_CTL_DEL, coro->wait_fd, NULL);
                 }
-                free_coroutine(coro);
+                coroutine_free(coro);
                 scheduler->count_not_ready_coroutine--;
             }        
         }
@@ -156,7 +156,7 @@ int scheduler_start(scheduler_t *scheduler)
 
             if (coro->state == FINISHED_COROUTINE)
             {
-                free_coroutine(coro);
+                coroutine_free(coro);
                 scheduler->count_not_ready_coroutine--;
             }
         }    

@@ -26,17 +26,17 @@ void coroutine_example(struct coroutine_t *coro, void* arg)
         }
     }
 
-    coroutine_t *coro_c = create_coroutine(coroutine_child_example, "coro_c -> ");
+    coroutine_t *coro_c = coroutine_create(coroutine_child_example, "coro_c -> ");
     scheduler_add_coroutine_to_start(coro->scheduler, coro_c);
 }
 
 int main()
 { 
-    coroutine_t *coro1 = create_coroutine(coroutine_example, "coro_1 -> ");
-    coroutine_t *coro2 = create_coroutine(coroutine_example, "coro_2 -> ");
-    coroutine_t *coro3 = create_coroutine(coroutine_example, "coro_3 -> ");
+    coroutine_t *coro1 = coroutine_create(coroutine_example, "coro_1 -> ");
+    coroutine_t *coro2 = coroutine_create(coroutine_example, "coro_2 -> ");
+    coroutine_t *coro3 = coroutine_create(coroutine_example, "coro_3 -> ");
 
-    scheduler_t *scheduler = create_scheduler();
+    scheduler_t *scheduler = scheduler_create();
 
     scheduler_add_coroutine_to_start(scheduler, coro1);
     scheduler_add_coroutine_to_start(scheduler, coro2);
@@ -44,7 +44,7 @@ int main()
 
     scheduler_start(scheduler);
 
-    free_scheduler(scheduler);
+    scheduler_free(scheduler);
 
     return 0;
 }

@@ -33,7 +33,7 @@ extern void context_save(context_t *ctx);
 extern void context_switch(context_t *old_ctx, context_t *new_ctx);
 extern void context_run(context_t *ctx);
 
-extern context_t *create_context(void (*func)(), size_t count_args, ...);
-extern void free_context(context_t *ctx);
+extern context_t *context_create(void *func, size_t count_args, ...);
+extern void context_free(context_t *ctx);
 
 #endif
