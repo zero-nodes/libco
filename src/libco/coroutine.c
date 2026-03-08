@@ -11,7 +11,7 @@ static void coroutine_entry(coroutine_t *coro)
 
     coro->state = FINISHED_COROUTINE;
     
-    context_switch(coro->coroutine_ctx, coro->scheduler->ctx);
+    context_switch(coro->coroutine_ctx, coro->scheduler_ctx);
 }
 
 coroutine_t *coroutine_create(void(*func)(coroutine_t *coro, void* arg), void* arg)
@@ -44,7 +44,7 @@ coroutine_t *coroutine_create(void(*func)(coroutine_t *coro, void* arg), void* a
 void coroutine_yield(coroutine_t *coro)
 {
     coro->state = WAITTING_COROUTINE;
-    context_switch(coro->coroutine_ctx, coro->scheduler->ctx);
+    context_switch(coro->coroutine_ctx, coro->scheduler_ctx);
 }
 
 void coroutine_free(coroutine_t *coro)

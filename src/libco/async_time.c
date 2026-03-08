@@ -1,5 +1,6 @@
 #include "libco/async_time.h"
 
+#include <errno.h>
 #include <stdio.h>
 #include <sys/timerfd.h>
 #include <sys/epoll.h>
@@ -25,6 +26,14 @@ int async_sleep(coroutine_t *coro, uint64_t ms)
     scheduler_ctl_add(coro->scheduler, coro, timer_fd, EPOLLIN | EPOLLONESHOT);
 
     coroutine_yield(coro);
+
+    uint64_t expirations;
+    ssize_t s = read(timer_fd, &expirations, sizeof(uint64_t));
+    if (s != sizeof(uint64_t)) {
+        if (errno != EAGAIN && errno != EWOULDBLOCK) {
+            perror("read timerfd");
+        }
+    }
 
     close(timer_fd);
 

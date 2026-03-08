@@ -54,7 +54,7 @@ int main()
 
         // --- Корутины ---
         start = now();
-        scheduler_t *scheduler = scheduler_create();
+        scheduler_t *scheduler = scheduler_create(1);
         for (int i = 0; i < COUNT_TEST; i++)
         {
             coroutine_t *coro = coroutine_create(coroutine_example, NULL);

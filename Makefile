@@ -1,7 +1,9 @@
 CC = clang
-CFLAGS = -I./include/ \
+CFLAGS = -fsanitize=address \
+		 -fsanitize=undefined \
+		 -fsanitize=leak \
+		 -I./include/ \
 		 -D_GNU_SOURCE \
-		 -O2 \
 		 -std=c23 \
 
 LIBRARY = build/libco.a

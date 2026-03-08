@@ -4,16 +4,6 @@
 
 #include <stdio.h>
 
-void coroutine_child_example(struct coroutine_t *coro, void* arg)
-{
-    char *str = (char *)arg;
-    for (int i = 0; i < 5; i++)
-    {
-        printf("%s%d\n", str, i);
-    }
-    return;
-}
-
 void coroutine_example(struct coroutine_t *coro, void* arg)
 {
     char *str = (char *)arg;
@@ -25,9 +15,6 @@ void coroutine_example(struct coroutine_t *coro, void* arg)
             return;
         }
     }
-
-    coroutine_t *coro_c = coroutine_create(coroutine_child_example, "coro_c -> ");
-    scheduler_add_coroutine_to_start(coro->scheduler, coro_c);
 }
 
 int main()
@@ -36,7 +23,7 @@ int main()
     coroutine_t *coro2 = coroutine_create(coroutine_example, "coro_2 -> ");
     coroutine_t *coro3 = coroutine_create(coroutine_example, "coro_3 -> ");
 
-    scheduler_t *scheduler = scheduler_create();
+    scheduler_t *scheduler = scheduler_create(1);
 
     scheduler_add_coroutine_to_start(scheduler, coro1);
     scheduler_add_coroutine_to_start(scheduler, coro2);

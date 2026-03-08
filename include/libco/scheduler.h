@@ -1,8 +1,10 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "context/context.h"
 #include "coroutine.h"
+#include "../src/libco/scheduler_queue_internal.h"
+
+#include <pthread.h>
 
 typedef enum
 {
@@ -14,17 +16,15 @@ typedef enum
 typedef struct scheduler_t
 {
     int epoll_fd;
-    int count_not_ready_coroutine;
+    short stop_flag;
+    _Atomic int count_not_ready_coroutine;
+    scheduler_queue_t *queue;
     scheduler_satus status;
-    context_t *ctx;
-
-    coroutine_t **start_list;
-    size_t len_start_list;
-    size_t cap_start_list;
-    size_t current_index;
+    int thread_count;
+    pthread_t *threads;
 } scheduler_t;
 
-extern scheduler_t* scheduler_create();
+extern scheduler_t* scheduler_create(int thread_count);
 extern void scheduler_free(scheduler_t *scheduler);
 extern int scheduler_add_coroutine_to_start(scheduler_t *scheduler, coroutine_t *coro);
 extern int scheduler_start(scheduler_t *scheduler);

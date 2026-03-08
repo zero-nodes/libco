@@ -16,6 +16,7 @@ typedef enum
 typedef struct coroutine_t
 {
     context_t *coroutine_ctx;
+    context_t *scheduler_ctx;
     scheduler_t *scheduler;
     coroutine_state state;
     void(*func)(struct coroutine_t *coro, void* arg);

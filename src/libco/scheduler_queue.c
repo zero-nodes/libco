@@ -7,7 +7,7 @@
 #include <string.h>
 
 #ifndef SCHEDULER_QUEUE_CAP
-#define SCHEDULER_QUEUE_CAP 1024 * 512
+#define SCHEDULER_QUEUE_CAP 1024 * 1024
 #endif
 
 #define IS_POWER_OF_TWO(x) (((x) != 0) && (((x) & ((x) - 1)) == 0))
@@ -41,7 +41,7 @@ scheduler_queue_t *scheduler_queue_create()
     return queue;
 }
 
-int push(scheduler_queue_t *queue, void *data)
+int scheduler_queue_push(scheduler_queue_t *queue, void *data)
 {
     if(!queue)
     {
@@ -72,7 +72,7 @@ int push(scheduler_queue_t *queue, void *data)
     }
 }
 
-void* pop(scheduler_queue_t *queue)
+void* scheduler_queue_pop(scheduler_queue_t *queue)
 {
     while (1) 
     {

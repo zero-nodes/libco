@@ -18,8 +18,8 @@ typedef struct scheduler_queue_t
 } scheduler_queue_t;
 
 extern scheduler_queue_t *scheduler_queue_create();
-extern int push(scheduler_queue_t *queue, void *data);
-extern void* pop(scheduler_queue_t *queue);
+extern int scheduler_queue_push(scheduler_queue_t *queue, void *data);
+extern void* scheduler_queue_pop(scheduler_queue_t *queue);
 extern void scheduler_queue_free(scheduler_queue_t *queue);
 
 #endif

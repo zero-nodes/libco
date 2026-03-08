@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef STANDARD_STACK_CONTEXT_SIZE;
+#ifndef STANDARD_STACK_CONTEXT_SIZE
 #define STANDARD_STACK_CONTEXT_SIZE (64 * 1024)
 #endif
 
